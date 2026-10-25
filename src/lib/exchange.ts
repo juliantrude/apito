@@ -4,7 +4,8 @@ import { TEMPO_MAX, TEMPO_MIN } from './types'
 const STORAGE_KEY = 'samba-trainer'
 
 export function newId(): string {
-  return crypto.randomUUID()
+  // randomUUID fehlt ohne HTTPS, z. B. beim Testen über die LAN-Adresse
+  return crypto.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`
 }
 
 export function defaultData(): AppData {
