@@ -1,5 +1,6 @@
 <script lang="ts">
   import Garland from './components/Garland.svelte'
+  import Mascot from './components/Mascot.svelte'
   import NewRhythm from './components/NewRhythm.svelte'
   import Onboarding from './components/Onboarding.svelte'
   import Overview from './components/Overview.svelte'
@@ -29,8 +30,8 @@
   <Garland />
   <div class="bar">
     <a class="logo" href={href({ name: 'overview' })}>
-      <span aria-hidden="true">🥁</span>
-      {t.appName}
+      <Mascot size="2.6rem" />
+      <span class="word">{t.appName}</span>
     </a>
     <a class="help" href={href({ name: 'intro' })} aria-label={t.help} title={t.help}>?</a>
   </div>
@@ -72,17 +73,16 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 800;
     color: inherit;
     text-decoration: none;
+  }
+  .word {
     background: linear-gradient(90deg, var(--c-pink), var(--c-orange) 55%, var(--c-purple));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-  }
-  .logo span {
-    -webkit-text-fill-color: initial;
   }
   .help {
     display: grid;

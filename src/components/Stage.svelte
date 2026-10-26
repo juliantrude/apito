@@ -2,6 +2,7 @@
   import { player, stop } from '../lib/player.svelte'
   import { currentRhythm } from '../lib/store.svelte'
   import { t } from '../lib/strings'
+  import Mascot from './Mascot.svelte'
   import TempoControl from './TempoControl.svelte'
 
   const ev = $derived(player.event)
@@ -19,6 +20,7 @@
       {#if ev.breakItem}<div class="name small">{ev.breakItem.name}</div>{/if}
       <div class="count">{ev.countNumber}</div>
     {:else if ev.phase === 'announce'}
+      <Mascot mood="blow" size="7rem" />
       <div class="name">{ev.breakItem?.name}</div>
     {:else if ev.phase === 'break'}
       <div class="name">{ev.breakItem?.name}</div>

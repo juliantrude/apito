@@ -8,6 +8,11 @@ describe('exchange', () => {
     expect(back).toEqual(rhythm)
   })
 
+  it('liest auch Dateien aus der Zeit als Samba-Trainer', () => {
+    const rhythm = exampleRhythm()
+    expect(rhythmFromFile(JSON.stringify({ app: 'samba-trainer', version: 1, rhythm }))).toEqual(rhythm)
+  })
+
   it('lehnt fremde Dateien ab', () => {
     expect(() => rhythmFromFile('{"foo": 1}')).toThrow()
     expect(() => rhythmFromFile('kein json')).toThrow()

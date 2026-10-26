@@ -1,7 +1,10 @@
 type Color = 'green' | 'yellow' | 'orange' | 'pink' | 'purple' | 'blue' | 'teal'
+export type Mood = 'happy' | 'wink' | 'blow'
 
 interface IntroSlide {
-  emoji: string
+  /** Entweder Apito in einer Stimmung oder ein Emoji. */
+  mascot?: Mood
+  emoji?: string
   color: Color
   title: string
   text: string
@@ -10,17 +13,18 @@ interface IntroSlide {
 
 /** Alle Oberflächentexte an einer Stelle, damit später übersetzt werden kann. */
 export const t = {
-  appName: 'Samba-Trainer',
+  appName: 'Apito',
+  tagline: 'Dein digitaler Anpfeifer – zum Üben zu Hause, ganz ohne Band.',
   help: 'Einführung',
   back: 'Zurück',
   next: 'Weiter',
 
   intro: [
     {
-      emoji: '🥁',
+      mascot: 'happy',
       color: 'pink',
-      title: 'Bem-vindo!',
-      text: 'Der Samba-Trainer ist ein Metronom, das dir zufällig Breaks ansagt – wie dein Mestre. So übst du, auf das Signal zu reagieren, auch ohne Band.',
+      title: 'Oi! Ich bin Apito.',
+      text: 'Dein digitaler Anpfeifer zum Üben zu Hause – ganz ohne Band. Ich gebe dir den Takt und pfeife dir zufällig Breaks an, wie dein Mestre. Du übst, auf mein Signal zu reagieren.',
     },
     {
       emoji: '🎶',
@@ -35,30 +39,31 @@ export const t = {
       text: 'Gib jedem Break einen Namen und sag, auf welchem Schlag eingezählt wird, wie viele Zählschläge es gibt und wie lang der Break ist. Mit ▶ hörst du ihn probe.',
     },
     {
-      emoji: '📣',
+      mascot: 'blow',
       color: 'purple',
       title: 'So läuft das Training',
-      text: 'Du spielst zum Klick. Irgendwann kommt ein Break:',
+      text: 'Du spielst zum Klick. Irgendwann pfeife ich einen Break an:',
       steps: [
-        { color: 'yellow', text: 'Doppelpfiff – der Name erscheint groß' },
+        { color: 'yellow', text: 'Doppelpfiff – der Name des Breaks erscheint groß' },
         { color: 'orange', text: 'Einzählen mit Pfiffen: 1 – 2 – 3 – 4' },
         { color: 'blue', text: 'Break mit anderem Klick' },
         { color: 'green', text: 'Zurück in den Groove' },
       ],
     },
     {
-      emoji: '🎯',
+      mascot: 'wink',
       color: 'teal',
       title: 'Tempo & Teilen',
       text: 'Fang langsam an und steigere dich: Dein letztes Tempo bleibt gespeichert, das Zieltempo steht immer daneben. Rhythmen kannst du als Datei exportieren und an deine Band schicken.',
     },
   ] satisfies IntroSlide[] as IntroSlide[],
   introSkip: 'Überspringen',
-  introDone: 'Los geht’s!',
+  introDone: 'Bora! Los geht’s!',
 
   overviewTitle: 'Deine Rhythmen',
   newRhythm: 'Neuer Rhythmus',
   emptyTitle: 'Noch keine Rhythmen',
+  emptyBubble: 'Leg los – ich pfeif dir was!',
   emptyText: 'Leg deinen ersten Rhythmus an und programmiere die Breaks ein, die du üben willst.',
   createFirst: 'Ersten Rhythmus anlegen',
   tryExample: 'Beispiel ausprobieren',

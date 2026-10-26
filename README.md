@@ -1,6 +1,7 @@
-# Samba-Trainer
+# Apito
 
-Metronom, das zufällig Breaks ankündigt und einzählt – zum Üben, ohne Band.
+Dein digitaler Anpfeifer: ein Metronom, das zufällig Samba-Breaks ankündigt
+und einzählt – zum Üben zu Hause, ganz ohne Band.
 Installierbare Web-App, läuft komplett lokal im Browser. Idee und Entscheidungen:
 [IDEA.md](IDEA.md).
 

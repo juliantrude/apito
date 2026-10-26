@@ -1,7 +1,9 @@
 import type { AppData, Break, Rhythm } from './types'
 import { TEMPO_MAX, TEMPO_MIN } from './types'
 
-const STORAGE_KEY = 'samba-trainer'
+const STORAGE_KEY = 'apito'
+/** Schlüssel aus der Zeit vor der Umbenennung, wird einmalig übernommen. */
+const LEGACY_STORAGE_KEY = 'samba-trainer'
 
 export function newId(): string {
   // randomUUID fehlt ohne HTTPS, z. B. beim Testen über die LAN-Adresse
@@ -41,7 +43,7 @@ export function defaultData(): AppData {
 
 export function loadData(): AppData {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY)
     if (raw) return parseData(JSON.parse(raw))
   } catch {
     // kaputte oder fehlende Daten → Standard
@@ -103,22 +105,22 @@ export function parseData(raw: unknown): AppData {
 
 /** Austauschformat: eine Datei pro Rhythmus inklusive Breaks. */
 export interface RhythmFile {
-  app: 'samba-trainer'
+  app: 'apito'
   version: 1
   rhythm: Rhythm
 }
 
 export function rhythmToFile(rhythm: Rhythm): RhythmFile {
-  return { app: 'samba-trainer', version: 1, rhythm }
+  return { app: 'apito', version: 1, rhythm }
 }
 
 export function rhythmFromFile(text: string): Rhythm {
-  const parsed = JSON.parse(text) as Partial<RhythmFile>
-  if (parsed?.app !== 'samba-trainer' || !parsed.rhythm) throw new Error('Keine Samba-Trainer-Datei')
+  const parsed = JSON.parse(text) as { app?: string; rhythm?: unknown }
+  if ((parsed?.app !== 'apito' && parsed?.app !== 'samba-trainer') || !parsed.rhythm) throw new Error('Keine Apito-Datei')
   return parseRhythm(parsed.rhythm)
 }
 
 export function fileName(rhythm: Rhythm): string {
   const slug = rhythm.name.toLowerCase().replace(/[^a-z0-9äöüß]+/g, '-').replace(/^-|-$/g, '')
-  return `${slug || 'rhythmus'}.samba.json`
+  return `${slug || 'rhythmus'}.apito.json`
 }

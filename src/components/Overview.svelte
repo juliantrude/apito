@@ -4,6 +4,7 @@
   import { go } from '../lib/router.svelte'
   import { data } from '../lib/store.svelte'
   import { t } from '../lib/strings'
+  import Mascot from './Mascot.svelte'
 
   const palette = ['pink', 'orange', 'green', 'purple', 'blue', 'teal', 'yellow']
   let message = $state('')
@@ -32,7 +33,10 @@
 
 {#if data.rhythms.length === 0}
   <section class="empty">
-    <div class="drum" aria-hidden="true">🪘</div>
+    <div class="hello">
+      <div class="bubble">{t.emptyBubble}</div>
+      <Mascot size="9rem" bounce />
+    </div>
     <h2>{t.emptyTitle}</h2>
     <p>{t.emptyText}</p>
     <button class="hot big" onclick={() => go({ name: 'new' })}>+ {t.createFirst}</button>
@@ -88,9 +92,32 @@
     max-width: 22rem;
     font-size: 1.1rem;
   }
-  .drum {
-    font-size: 5rem;
-    line-height: 1;
+  .hello {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+  }
+  .bubble {
+    position: relative;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+  }
+  .bubble::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.6rem;
+    width: 1rem;
+    height: 1rem;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-top: none;
+    border-left: none;
+    transform: translateX(-50%) rotate(45deg);
   }
   .big {
     width: 100%;

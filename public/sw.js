@@ -1,6 +1,6 @@
 // Offline-Cache: Seiten zuerst aus dem Netz (damit Updates ankommen),
 // alles andere zuerst aus dem Cache. Beides wird beim Laden nachgefüllt.
-const CACHE = 'samba-trainer-v2'
+const CACHE = 'apito-v1'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', 'manifest.webmanifest', 'icon.svg'])))

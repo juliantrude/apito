@@ -1,5 +1,6 @@
 <script lang="ts">
   import { t } from '../lib/strings'
+  import Mascot from './Mascot.svelte'
 
   let { ondone }: { ondone: () => void } = $props()
 
@@ -43,7 +44,11 @@
 
   {#key index}
     <div class="content">
-      <div class="emoji" aria-hidden="true">{slide.emoji}</div>
+      {#if slide.mascot}
+        <Mascot mood={slide.mascot} size="8rem" bounce={index === 0} />
+      {:else}
+        <div class="emoji" aria-hidden="true">{slide.emoji}</div>
+      {/if}
       <h1>{slide.title}</h1>
       <p>{slide.text}</p>
       {#if slide.steps}
@@ -112,6 +117,9 @@
   .emoji {
     font-size: 5rem;
     line-height: 1;
+  }
+  .content :global(.apito),
+  .emoji {
     margin-bottom: 1rem;
   }
   h1 {
