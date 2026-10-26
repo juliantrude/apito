@@ -166,6 +166,7 @@ gibt sie seinen Schülern frei → braucht eine **Marketplace-/Freigabe-Logik**.
 - **Design**: bunt, Samba-Fest (Bandeirinhas, Pink/Orange/Gelb/Grün/Lila),
   Schrift Baloo 2 lokal eingebunden (offline-fähig).
 - **Name & Branding**: Die App heißt **Apito** (die Sambapfeife). Maskottchen ist
-  Apito selbst, eine gelbe Pfeife mit Gesicht: „Oi! Ich bin Apito, dein digitaler
+  Apito selbst, eine Dreiton-Sambapfeife als Figur (Kordel = Haare, grüne und
+  rote Kammer = Arme, Mundstück = Beine): „Oi! Ich bin Apito, dein digitaler
   Anpfeifer zum Üben zu Hause – ganz ohne Band.“ Gespeicherte Daten und
   Exportdateien aus der Zeit als Samba-Trainer werden weiter gelesen.

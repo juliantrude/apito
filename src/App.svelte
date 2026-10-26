@@ -30,7 +30,7 @@
   <Garland />
   <div class="bar">
     <a class="logo" href={href({ name: 'overview' })}>
-      <Mascot size="2.6rem" />
+      <Mascot size="3.2rem" />
       <span class="word">{t.appName}</span>
     </a>
     <a class="help" href={href({ name: 'intro' })} aria-label={t.help} title={t.help}>?</a>
