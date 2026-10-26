@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { defaultData, parseData, rhythmFromFile, rhythmToFile } from './exchange'
+import { defaultData, exampleRhythm, parseData, rhythmFromFile, rhythmToFile } from './exchange'
 
 describe('exchange', () => {
   it('übersteht einen Export-Import-Durchlauf unverändert', () => {
-    const rhythm = defaultData().rhythms[0]
+    const rhythm = exampleRhythm()
     const back = rhythmFromFile(JSON.stringify(rhythmToFile(rhythm)))
     expect(back).toEqual(rhythm)
   })
@@ -20,10 +20,11 @@ describe('exchange', () => {
     const r = data.rhythms[0]
     expect(r.lastTempo).toBe(240)
     expect(r.breaks[0]).toMatchObject({ countStartBeat: 4, countBeats: 1, name: 'Break', active: true })
-    expect(data.currentRhythmId).toBe(r.id)
+    expect(data.currentRhythmId).toBeNull()
   })
 
-  it('fällt bei leeren Daten auf den Standard zurück', () => {
-    expect(parseData(null).rhythms).toHaveLength(1)
+  it('startet ohne Rhythmen und mit Onboarding', () => {
+    expect(parseData(null)).toEqual(defaultData())
+    expect(defaultData()).toMatchObject({ rhythms: [], settings: { onboarded: false } })
   })
 })

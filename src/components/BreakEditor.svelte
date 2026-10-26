@@ -29,18 +29,18 @@
   }
 </script>
 
-<form class="editor" onsubmit={submit}>
+<form class="card editor" onsubmit={submit}>
   <h2>{isNew ? t.editorTitleNew : t.editorTitleEdit}</h2>
 
-  <label>
+  <label class="field">
     {t.name}
     <!-- svelte-ignore a11y_autofocus -->
     <input bind:value={draft.name} required autofocus={isNew} />
   </label>
 
-  <fieldset>
+  <fieldset class="field">
     <legend>{t.countStartBeat}</legend>
-    <div class="beats">
+    <div class="choices">
       {#each { length: beatsPerBar }, i}
         <button
           type="button"
@@ -51,22 +51,22 @@
     </div>
   </fieldset>
 
-  <label>
+  <label class="field">
     {t.countBeats}
     <input type="number" min="1" max="16" bind:value={draft.countBeats} />
   </label>
 
-  <label>
+  <label class="field">
     {t.lengthBeats}
     <input type="number" min="1" max="256" bind:value={draft.lengthBeats} />
     <small>{t.lengthHint(beatsPerBar, draft.lengthBeats || 0)}</small>
   </label>
 
   <div class="actions">
-    <button type="button" disabled={!valid} onclick={() => previewBreak({ ...draft })}>▶ {t.preview}</button>
+    <button type="button" class="play" disabled={!valid} onclick={() => previewBreak({ ...draft })}>▶ {t.preview}</button>
     <span class="spacer"></span>
     <button type="button" onclick={oncancel}>{t.cancel}</button>
-    <button type="submit" class="primary" disabled={!valid}>{t.save}</button>
+    <button type="submit" class="hot" disabled={!valid}>{t.save}</button>
   </div>
 </form>
 
@@ -74,19 +74,14 @@
   .editor {
     display: grid;
     gap: 1rem;
-    padding: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-    background: var(--surface);
+    padding: 1.1rem;
+    border-color: var(--c-pink);
   }
   h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
-  label,
   fieldset {
-    display: grid;
-    gap: 0.35rem;
     border: none;
     padding: 0;
     margin: 0;
@@ -95,28 +90,15 @@
     padding: 0;
     margin-bottom: 0.35rem;
   }
-  small {
-    color: var(--muted);
-  }
-  .beats {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  .beats button {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.1rem;
-  }
-  .beats button.selected {
-    background: var(--accent);
-    color: var(--on-accent);
-    border-color: var(--accent);
-  }
   .actions {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+  }
+  .play {
+    background: var(--c-teal);
+    border-color: var(--c-teal);
+    color: white;
   }
   .spacer {
     flex: 1;

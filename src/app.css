@@ -1,34 +1,50 @@
+@import '@fontsource-variable/baloo-2';
+
 :root {
-  --bg: #f7f5f0;
+  /* Samba-Palette */
+  --c-green: #10a957;
+  --c-yellow: #ffc527;
+  --c-orange: #ff7a1a;
+  --c-pink: #ff3d8b;
+  --c-purple: #7a3cf0;
+  --c-blue: #1d6fe0;
+  --c-teal: #0bb4a8;
+
+  --bg: #fff7e8;
   --surface: #ffffff;
-  --text: #1d1b18;
-  --muted: #6b665d;
-  --border: #d9d4c8;
-  --accent: #0b8a4a;
+  --text: #2b1640;
+  --muted: #76648a;
+  --border: #ecdcc4;
+  --accent: var(--c-green);
   --on-accent: #ffffff;
-  --danger: #c0392b;
-  --announce-bg: #ffd84d;
-  --count-bg: #ffb347;
-  --break-bg: #2f6fd6;
+  --hot: linear-gradient(135deg, var(--c-pink), var(--c-orange));
+  --danger: #e0313f;
+
+  --groove-bg: var(--bg);
+  --announce-bg: var(--c-yellow);
+  --announce-fg: #2b1640;
+  --count-bg: linear-gradient(160deg, var(--c-orange), var(--c-pink));
+  --break-bg: linear-gradient(160deg, var(--c-purple), var(--c-blue));
+
+  --radius: 1.1rem;
+  --shadow: 0 6px 18px -8px rgb(80 30 60 / 0.35);
 
   color-scheme: light dark;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Baloo 2 Variable', system-ui, sans-serif;
   color: var(--text);
   -webkit-tap-highlight-color: transparent;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15171a;
-    --surface: #1f2226;
-    --text: #f1efe9;
-    --muted: #a19c92;
-    --border: #3a3e44;
-    --accent: #2fc27a;
-    --on-accent: #0b1a12;
-    --announce-bg: #8a6d00;
-    --count-bg: #9a4f00;
-    --break-bg: #1c4796;
+    --bg: #1a0f2e;
+    --surface: #2a1a48;
+    --text: #fff3e2;
+    --muted: #b9a7d4;
+    --border: #3e2c63;
+    --accent: #22c46e;
+    --on-accent: #0c1f14;
+    --shadow: 0 6px 18px -8px rgb(0 0 0 / 0.6);
   }
 }
 
@@ -38,13 +54,26 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 8% 12%, color-mix(in srgb, var(--c-pink) 14%, transparent) 0 9rem, transparent 9rem),
+    radial-gradient(circle at 95% 30%, color-mix(in srgb, var(--c-yellow) 18%, transparent) 0 7rem, transparent 7rem),
+    radial-gradient(circle at 20% 95%, color-mix(in srgb, var(--c-teal) 12%, transparent) 0 10rem, transparent 10rem),
+    var(--bg);
+  background-attachment: fixed;
 }
 
 #app {
   max-width: 40rem;
   margin: 0 auto;
-  padding: 0 1rem 2rem;
+  padding: 0 1rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.1;
+  font-weight: 800;
 }
 
 button,
@@ -55,11 +84,17 @@ input {
 
 button {
   cursor: pointer;
-  padding: 0.5rem 0.9rem;
-  border-radius: 0.6rem;
-  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 2px solid var(--border);
   background: var(--surface);
+  font-weight: 600;
   touch-action: manipulation;
+  transition: transform 0.08s;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.96);
 }
 
 button:disabled {
@@ -71,13 +106,69 @@ button.primary {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--on-accent);
+  font-weight: 700;
+}
+
+button.hot {
+  background: var(--hot);
+  border: none;
+  color: white;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+}
+
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
+input:not([type='checkbox']):not([type='range']):not([type='file']) {
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.8rem;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  width: 100%;
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--c-pink);
+  outline-offset: 2px;
+}
+
+.card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
   font-weight: 600;
 }
 
-input:not([type='checkbox']):not([type='range']) {
-  padding: 0.55rem 0.7rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  width: 100%;
+.field small {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.choices {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.choices button {
+  min-width: 3rem;
+  height: 3rem;
+  padding: 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.choices button.selected {
+  background: var(--c-pink);
+  border-color: var(--c-pink);
+  color: white;
 }

@@ -1,28 +1,58 @@
 <script lang="ts">
-  import BreakList from './components/BreakList.svelte'
+  import Garland from './components/Garland.svelte'
+  import NewRhythm from './components/NewRhythm.svelte'
+  import Onboarding from './components/Onboarding.svelte'
+  import Overview from './components/Overview.svelte'
+  import RhythmPage from './components/RhythmPage.svelte'
   import Stage from './components/Stage.svelte'
-  import Trainer from './components/Trainer.svelte'
   import { player } from './lib/player.svelte'
+  import { go, href, router } from './lib/router.svelte'
+  import { data, findRhythm } from './lib/store.svelte'
   import { t } from './lib/strings'
 
-  let tab = $state<'trainer' | 'breaks'>('trainer')
+  const route = $derived(router.route)
+  const rhythm = $derived(route.name === 'rhythm' ? findRhythm(route.id) : undefined)
+  const showIntro = $derived(route.name === 'intro' || !data.settings.onboarded)
+
+  // Der Player spielt immer den Rhythmus, der gerade offen ist.
+  $effect(() => {
+    data.currentRhythmId = rhythm?.id ?? null
+  })
+
+  function finishIntro() {
+    data.settings.onboarded = true
+    if (route.name === 'intro') go({ name: 'overview' }, { replace: true })
+  }
 </script>
 
 <header>
-  <h1>{t.appName}</h1>
-  <nav>
-    <button class:selected={tab === 'trainer'} onclick={() => (tab = 'trainer')}>{t.tabTrainer}</button>
-    <button class:selected={tab === 'breaks'} onclick={() => (tab = 'breaks')}>{t.tabBreaks}</button>
-  </nav>
+  <Garland />
+  <div class="bar">
+    <a class="logo" href={href({ name: 'overview' })}>
+      <span aria-hidden="true">🥁</span>
+      {t.appName}
+    </a>
+    <a class="help" href={href({ name: 'intro' })} aria-label={t.help} title={t.help}>?</a>
+  </div>
 </header>
 
 <main>
-  {#if tab === 'trainer'}
-    <Trainer />
+  {#if route.name === 'new'}
+    <NewRhythm />
+  {:else if route.name === 'rhythm'}
+    {#if rhythm}
+      <RhythmPage {rhythm} tab={route.tab} />
+    {:else}
+      <p class="missing">{t.notFound} <a href={href({ name: 'overview' })}>{t.toOverview}</a></p>
+    {/if}
   {:else}
-    <BreakList />
+    <Overview />
   {/if}
 </main>
+
+{#if showIntro}
+  <Onboarding ondone={finishIntro} />
+{/if}
 
 {#if player.running}
   <Stage />
@@ -30,28 +60,43 @@
 
 <style>
   header {
+    margin: 0 -1rem 1rem;
+  }
+  .bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
+    padding: 0.25rem 1rem 0;
   }
-  h1 {
-    margin: 0;
-    font-size: 1.2rem;
-  }
-  nav {
+  .logo {
     display: flex;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: inherit;
+    text-decoration: none;
+    background: linear-gradient(90deg, var(--c-pink), var(--c-orange) 55%, var(--c-purple));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  nav button {
-    background: transparent;
-    border-color: transparent;
+  .logo span {
+    -webkit-text-fill-color: initial;
   }
-  nav button.selected {
-    border-color: var(--accent);
-    color: var(--accent);
+  .help {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--c-yellow);
+    color: #2b1640;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .missing {
+    text-align: center;
+    color: var(--muted);
   }
 </style>

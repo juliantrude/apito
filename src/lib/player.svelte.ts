@@ -12,7 +12,7 @@ export const player = $state({
 })
 
 const engine = new Engine(
-  () => currentRhythm().lastTempo,
+  () => currentRhythm()?.lastTempo ?? 120,
   (event) => {
     player.event = event
     if (event.beatInBar === 0 && event.phase !== 'countin') player.bar++
@@ -36,6 +36,7 @@ document.addEventListener('visibilitychange', () => {
 
 function begin(mode: 'train' | 'preview', preview?: Break) {
   const rhythm = currentRhythm()
+  if (!rhythm) return
   const planner = new Planner({
     beatsPerBar: rhythm.beatsPerBar,
     leadBars: data.settings.leadBars,

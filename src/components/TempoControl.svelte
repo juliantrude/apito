@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { currentRhythm } from '../lib/store.svelte'
   import { t } from '../lib/strings'
-  import { TEMPO_MAX, TEMPO_MIN } from '../lib/types'
+  import { TEMPO_MAX, TEMPO_MIN, type Rhythm } from '../lib/types'
 
-  let { compact = false }: { compact?: boolean } = $props()
-
-  const rhythm = $derived(currentRhythm())
+  let { rhythm, compact = false }: { rhythm: Rhythm; compact?: boolean } = $props()
 
   function set(value: number) {
     rhythm.lastTempo = Math.min(TEMPO_MAX, Math.max(TEMPO_MIN, Math.round(value)))
@@ -75,12 +72,13 @@
   .step {
     width: 3rem;
     height: 3rem;
+    padding: 0;
     border-radius: 50%;
     font-size: 1.1rem;
   }
   input[type='range'] {
     width: min(100%, 24rem);
-    accent-color: var(--accent);
+    accent-color: var(--c-pink);
   }
   .target {
     background: transparent;
@@ -91,7 +89,8 @@
   }
   .target.reached {
     border-style: solid;
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--c-green);
+    background: var(--c-green);
+    color: white;
   }
 </style>

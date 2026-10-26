@@ -8,20 +8,35 @@ export function newId(): string {
   return crypto.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`
 }
 
-export function defaultData(): AppData {
-  const rhythm: Rhythm = {
+export function newRhythm(over: Partial<Rhythm> = {}): Rhythm {
+  const targetTempo = over.targetTempo ?? 120
+  return {
     id: newId(),
-    name: 'Mein Rhythmus',
+    name: 'Neuer Rhythmus',
     beatsPerBar: 4,
-    targetTempo: 120,
-    lastTempo: 120,
+    targetTempo,
+    lastTempo: targetTempo,
     avgGapBars: 10,
+    breaks: [],
+    ...over,
+  }
+}
+
+/** Beispiel zum Ausprobieren, wird nur auf Wunsch angelegt. */
+export function exampleRhythm(): Rhythm {
+  return newRhythm({
+    name: 'Samba Reggae (Beispiel)',
+    targetTempo: 100,
+    lastTempo: 90,
     breaks: [
       { id: newId(), name: 'Break 1', countStartBeat: 1, countBeats: 4, lengthBeats: 8, active: true },
       { id: newId(), name: 'Break 2', countStartBeat: 3, countBeats: 4, lengthBeats: 4, active: true },
     ],
-  }
-  return { version: 1, settings: { leadBars: 2 }, rhythms: [rhythm], currentRhythmId: rhythm.id }
+  })
+}
+
+export function defaultData(): AppData {
+  return { version: 1, settings: { leadBars: 2, onboarded: false }, rhythms: [], currentRhythmId: null }
 }
 
 export function loadData(): AppData {
@@ -77,14 +92,12 @@ export function parseRhythm(raw: unknown): Rhythm {
 export function parseData(raw: unknown): AppData {
   const d = (raw ?? {}) as Record<string, unknown>
   const rhythms = Array.isArray(d.rhythms) ? d.rhythms.map(parseRhythm) : []
-  if (rhythms.length === 0) return defaultData()
   const settings = (d.settings ?? {}) as Record<string, unknown>
-  const current = rhythms.find((r) => r.id === d.currentRhythmId) ?? rhythms[0]
   return {
     version: 1,
-    settings: { leadBars: int(settings.leadBars, 0, 8, 2) },
+    settings: { leadBars: int(settings.leadBars, 0, 8, 2), onboarded: settings.onboarded === true },
     rhythms,
-    currentRhythmId: current.id,
+    currentRhythmId: rhythms.find((r) => r.id === d.currentRhythmId)?.id ?? null,
   }
 }
 

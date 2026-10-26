@@ -5,8 +5,10 @@
   import TempoControl from './TempoControl.svelte'
 
   const ev = $derived(player.event)
-  const bpb = $derived(currentRhythm().beatsPerBar)
+  const rhythm = $derived(currentRhythm())
+  const bpb = $derived(rhythm?.beatsPerBar ?? 4)
   const phase = $derived(ev?.phase ?? 'countin')
+  const dotColors = ['pink', 'yellow', 'green', 'blue', 'orange', 'purple', 'teal']
 </script>
 
 <div class="stage phase-{phase}">
@@ -24,7 +26,8 @@
     {:else}
       <div class="dots">
         {#each { length: bpb }, i}
-          <span class:on={ev.beatInBar === i} class:one={i === 0}></span>
+          <span class:on={ev.beatInBar === i} class:one={i === 0} style="--dot: var(--c-{dotColors[i % dotColors.length]})"
+          ></span>
         {/each}
       </div>
       <div class="bar">{t.bar} {player.bar}</div>
@@ -32,7 +35,7 @@
   </div>
 
   <div class="controls">
-    {#if player.mode === 'train'}<TempoControl compact />{/if}
+    {#if player.mode === 'train' && rhythm}<TempoControl {rhythm} compact />{/if}
     <button class="stop" onclick={stop}>{t.stop}</button>
   </div>
 </div>
@@ -46,19 +49,18 @@
     flex-direction: column;
     background: var(--bg);
     padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
-    transition: background 0.15s;
   }
   .phase-announce {
     background: var(--announce-bg);
+    color: var(--announce-fg);
   }
   .phase-count,
   .phase-countin {
     background: var(--count-bg);
+    color: white;
   }
   .phase-break {
     background: var(--break-bg);
-  }
-  .phase-break .display {
     color: white;
   }
   .display {
@@ -73,6 +75,7 @@
   }
   .name {
     font-size: clamp(2.5rem, 13vw, 7rem);
+    text-shadow: 0 3px 0 rgb(0 0 0 / 0.12);
     font-weight: 800;
     line-height: 1.05;
     overflow-wrap: anywhere;
@@ -89,7 +92,7 @@
   }
   .hint {
     font-size: 1.5rem;
-    color: var(--muted);
+    opacity: 0.8;
   }
   .progress {
     width: min(90%, 36rem);
@@ -118,7 +121,11 @@
     outline-offset: 3px;
   }
   .dots span.on {
-    background: var(--accent);
+    background: var(--dot);
+    transform: scale(1.25);
+  }
+  .dots span {
+    transition: transform 0.08s;
   }
   .bar {
     color: var(--muted);
@@ -128,6 +135,12 @@
     display: grid;
     gap: 1rem;
     justify-items: center;
+    /* eigene Fläche, damit die Bedienung auf jeder Phasenfarbe lesbar bleibt */
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 1.5rem;
+    padding: 1rem;
+    box-shadow: var(--shadow);
   }
   .stop {
     width: min(100%, 24rem);

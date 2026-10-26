@@ -155,3 +155,13 @@ Damit sind Urheberrechtsfragen für die ersten Versionen umgangen.
 Mit Playback bauen nicht mehr die Schüler die Stücke, sondern der Lehrer, und
 gibt sie seinen Schülern frei → braucht eine **Marketplace-/Freigabe-Logik**.
 
+
+## Nachträge nach V1
+
+- **Startseite = Projektübersicht**: „Projekt“ heißt in der App Rhythmus. Die
+  Mehr-Rhythmen-Verwaltung aus V2 ist damit vorgezogen (Anlegen, Duplizieren,
+  Löschen, Import als neuer Rhythmus, Export pro Rhythmus).
+- **Onboarding**: fünf kurze Folien beim ersten Start, jederzeit über „?“
+  erneut aufrufbar.
+- **Design**: bunt, Samba-Fest (Bandeirinhas, Pink/Orange/Gelb/Grün/Lila),
+  Schrift Baloo 2 lokal eingebunden (offline-fähig).

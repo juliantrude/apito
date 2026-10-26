@@ -7,7 +7,17 @@ $effect.root(() => {
   $effect(() => saveData($state.snapshot(data)))
 })
 
-/** In V1 gibt es genau einen (unsichtbaren) Rhythmus. */
-export function currentRhythm(): Rhythm {
-  return data.rhythms.find((r) => r.id === data.currentRhythmId) ?? data.rhythms[0]
+/** Der gerade geöffnete Rhythmus, falls einer offen ist. */
+export function currentRhythm(): Rhythm | undefined {
+  return data.rhythms.find((r) => r.id === data.currentRhythmId)
+}
+
+export function findRhythm(id: string): Rhythm | undefined {
+  return data.rhythms.find((r) => r.id === id)
+}
+
+/** Taktart ändern und Einzähl-Startschläge der Breaks mitziehen. */
+export function setBeatsPerBar(rhythm: Rhythm, beatsPerBar: number) {
+  rhythm.beatsPerBar = beatsPerBar
+  for (const b of rhythm.breaks) b.countStartBeat = Math.min(b.countStartBeat, beatsPerBar)
 }

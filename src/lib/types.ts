@@ -25,14 +25,19 @@ export interface Rhythm {
 export interface Settings {
   /** Volle Takte zwischen Doppelpfiff-Takt und Einzähltakt. */
   leadBars: number
+  /** Onboarding wurde einmal durchgeklickt oder übersprungen. */
+  onboarded: boolean
 }
 
 export interface AppData {
   version: 1
   settings: Settings
   rhythms: Rhythm[]
-  currentRhythmId: string
+  /** Rhythmus, der gerade geöffnet ist (für Player und Anzeige). */
+  currentRhythmId: string | null
 }
+
+export const BEATS_PER_BAR_OPTIONS = [2, 3, 4, 5, 6, 7]
 
 export const TEMPO_MIN = 40
 export const TEMPO_MAX = 240
