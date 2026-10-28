@@ -1,3 +1,5 @@
+import type { Browser } from './platform'
+
 type Color = 'green' | 'yellow' | 'orange' | 'pink' | 'purple' | 'blue' | 'teal'
 export type Mood = 'happy' | 'wink' | 'blow'
 
@@ -9,6 +11,12 @@ interface IntroSlide {
   title: string
   text: string
   steps?: { color: Color; text: string }[]
+}
+
+export type InstallIcon = 'share' | 'dots' | 'menu' | 'add' | 'check'
+
+interface InstallGuide {
+  steps: { icon: InstallIcon; text: string }[]
 }
 
 /** Alle Oberflächentexte an einer Stelle, damit später übersetzt werden kann. */
@@ -58,6 +66,75 @@ export const t = {
     },
   ] satisfies IntroSlide[] as IntroSlide[],
   introSkip: 'Überspringen',
+
+  install: {
+    title: 'Hol mich aufs Handy!',
+    text: 'Als App bin ich mit einem Tipp da, laufe im Vollbild und auch ohne Internet.',
+    button: 'Jetzt installieren',
+    manual: 'So geht’s:',
+    manualAlt: 'Oder von Hand:',
+    outro: 'Danach öffnest du Apito über das neue Symbol auf deinem Startbildschirm – dort geht die Einführung weiter.',
+    continueInBrowser: 'Erst mal im Browser weiter',
+    doneTitle: 'Geschafft!',
+    doneText: 'Öffne Apito jetzt über das neue Symbol auf deinem Startbildschirm – dort geht die Einführung weiter.',
+    guides: {
+      'ios-safari': {
+        steps: [
+          { icon: 'share', text: 'Tippe unten auf das Teilen-Symbol. Siehst du es nicht, tippe erst auf •••.' },
+          { icon: 'add', text: 'Wähle „Zum Home-Bildschirm“ – eventuell etwas nach unten scrollen.' },
+          { icon: 'check', text: 'Tippe oben rechts auf „Hinzufügen“.' },
+        ],
+      },
+      'ios-chrome': {
+        steps: [
+          { icon: 'share', text: 'Tippe oben rechts in der Adressleiste auf das Teilen-Symbol.' },
+          { icon: 'add', text: 'Wähle „Zum Home-Bildschirm“ – eventuell unter „Mehr“.' },
+          { icon: 'check', text: 'Tippe auf „Hinzufügen“.' },
+        ],
+      },
+      'ios-firefox': {
+        steps: [
+          { icon: 'menu', text: 'Tippe unten rechts auf das Menü ☰.' },
+          { icon: 'share', text: 'Wähle „Teilen“.' },
+          { icon: 'add', text: 'Wähle „Zum Home-Bildschirm“ und tippe auf „Hinzufügen“.' },
+        ],
+      },
+      'ios-other': {
+        steps: [
+          { icon: 'share', text: 'Öffne die Seite in Safari und tippe auf das Teilen-Symbol.' },
+          { icon: 'add', text: 'Wähle „Zum Home-Bildschirm“ und tippe auf „Hinzufügen“.' },
+        ],
+      },
+      'android-chrome': {
+        steps: [
+          { icon: 'dots', text: 'Tippe oben rechts auf das Menü ⋮.' },
+          { icon: 'add', text: 'Wähle „Zum Startbildschirm hinzufügen“ oder „App installieren“.' },
+          { icon: 'check', text: 'Bestätige mit „Installieren“.' },
+        ],
+      },
+      'android-firefox': {
+        steps: [
+          { icon: 'dots', text: 'Tippe auf das Menü ⋮ (oben oder unten rechts).' },
+          { icon: 'add', text: 'Wähle „Zum Startbildschirm hinzufügen“ – je nach Version auch „Installieren“.' },
+          { icon: 'check', text: 'Bestätige mit „Hinzufügen“.' },
+        ],
+      },
+      'android-samsung': {
+        steps: [
+          { icon: 'menu', text: 'Tippe unten rechts auf das Menü ☰.' },
+          { icon: 'add', text: 'Wähle „Seite hinzufügen zu“ und dann „Startbildschirm“.' },
+          { icon: 'check', text: 'Bestätige mit „Hinzufügen“.' },
+        ],
+      },
+      'android-other': {
+        steps: [
+          { icon: 'dots', text: 'Öffne das Menü deines Browsers.' },
+          { icon: 'add', text: 'Wähle „Zum Startbildschirm hinzufügen“ oder „App installieren“.' },
+        ],
+      },
+    } satisfies Record<Exclude<Browser, 'desktop'>, InstallGuide> as Record<Exclude<Browser, 'desktop'>, InstallGuide>,
+  },
+
   introDone: 'Bora! Los geht’s!',
 
   overviewTitle: 'Deine Rhythmen',
