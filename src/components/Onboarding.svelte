@@ -1,30 +1,38 @@
 <script lang="ts">
-  import { browser, install, promptInstall } from '../lib/install.svelte'
+  import { browser, install, mustInstall, promptInstall } from '../lib/install.svelte'
   import { t, type InstallIcon } from '../lib/strings'
   import Mascot from './Mascot.svelte'
 
-  let { ondone }: { ondone: () => void } = $props()
+  let {
+    ondone,
+    onseen,
+    startAtInstall = false,
+  }: { ondone: () => void; onseen: () => void; startAtInstall?: boolean } = $props()
 
   const slides = t.intro
-  let index = $state(0)
-  const slide = $derived(slides[index])
-  const last = $derived(index === slides.length - 1)
+  // Im Browser-Tab endet die Einführung mit der Installationsanleitung – und dort geht es nicht weiter.
+  const guide = mustInstall && browser !== 'desktop' ? t.install.guides[browser] : undefined
+  const pages = slides.length + (guide ? 1 : 0)
 
-  // Im Browser-Tab kommt vor der Einführung erst die Installationsanleitung.
-  const guide = browser === 'desktop' || install.standalone ? undefined : t.install.guides[browser]
-  let installing = $state(guide !== undefined)
+  // svelte-ignore state_referenced_locally
+  let index = $state(guide && startAtInstall ? slides.length : 0)
+  const installing = $derived(index === slides.length)
+  const slide = $derived(slides[Math.min(index, slides.length - 1)])
+  const last = $derived(index === pages - 1)
+
+  $effect(() => {
+    if (installing) onseen()
+  })
 
   let touchX = 0
 
   function next() {
-    if (installing) installing = false
-    else if (last) ondone()
+    if (installing) return
+    if (last) ondone()
     else index++
   }
   function prev() {
-    if (installing) return
     if (index > 0) index--
-    else if (guide) installing = true
   }
   function key(e: KeyboardEvent) {
     if (e.key === 'ArrowRight') next()
@@ -48,8 +56,6 @@
     if (dx > 50) prev()
   }}
 >
-  <button class="skip ghost" onclick={ondone}>{t.introSkip}</button>
-
   {#if installing && guide}
     <div class="content">
       {#if install.installed}
@@ -72,11 +78,6 @@
         <p class="outro">{t.install.outro}</p>
       {/if}
     </div>
-    <div class="nav">
-      <div class="buttons">
-        <button class="next" onclick={next}>{t.install.continueInBrowser}</button>
-      </div>
-    </div>
   {:else}
     {#key index}
       <div class="content">
@@ -96,25 +97,36 @@
         {/if}
       </div>
     {/key}
+  {/if}
 
-    <div class="nav">
-      <div class="dots">
-        {#each slides as s, i}
-          <button
-            class="dot"
-            class:on={i === index}
-            style="--dot: var(--c-{s.color})"
-            onclick={() => (index = i)}
-            aria-label={`${i + 1}`}
-          ></button>
-        {/each}
-      </div>
+  <div class="nav">
+    <div class="dots">
+      {#each slides as s, i}
+        <button
+          class="dot"
+          class:on={i === index}
+          style="--dot: var(--c-{s.color})"
+          onclick={() => (index = i)}
+          aria-label={`${i + 1}`}
+        ></button>
+      {/each}
+      {#if guide}
+        <button
+          class="dot"
+          class:on={installing}
+          style="--dot: var(--c-blue)"
+          onclick={() => (index = slides.length)}
+          aria-label={`${pages}`}
+        ></button>
+      {/if}
+    </div>
+    {#if !installing}
       <div class="buttons">
         {#if index > 0}<button onclick={prev}>{t.back}</button>{/if}
         <button class="hot next" onclick={next}>{last ? t.introDone : t.next}</button>
       </div>
-    </div>
-  {/if}
+    {/if}
+  </div>
 </div>
 
 {#snippet icon(name: InstallIcon)}
@@ -146,10 +158,6 @@
       radial-gradient(circle at 10% 90%, color-mix(in srgb, var(--slide) 22%, transparent) 0 14rem, transparent 14rem),
       var(--bg);
     transition: background 0.3s;
-  }
-  .skip {
-    align-self: flex-end;
-    color: var(--muted);
   }
   .content {
     flex: 1;

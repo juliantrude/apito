@@ -14,6 +14,9 @@ function runsAsApp() {
 
 export const browser = detectBrowser(navigator.userAgent, navigator.maxTouchPoints)
 
+/** Auf dem Handy läuft Apito nur installiert; am Computer bleibt der Browser erlaubt. */
+export const mustInstall = browser !== 'desktop' && !runsAsApp()
+
 export const install = $state({
   /** Läuft als installierte App statt im Browser-Tab. */
   standalone: runsAsApp(),

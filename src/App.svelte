@@ -6,6 +6,7 @@
   import Overview from './components/Overview.svelte'
   import RhythmPage from './components/RhythmPage.svelte'
   import Stage from './components/Stage.svelte'
+  import { mustInstall } from './lib/install.svelte'
   import { player } from './lib/player.svelte'
   import { go, href, router } from './lib/router.svelte'
   import { data, findRhythm } from './lib/store.svelte'
@@ -13,7 +14,11 @@
 
   const route = $derived(router.route)
   const rhythm = $derived(route.name === 'rhythm' ? findRhythm(route.id) : undefined)
-  const showIntro = $derived(route.name === 'intro' || !data.settings.onboarded)
+  // Auf dem Handy im Browser-Tab bleibt die Einführung offen, bis Apito installiert ist.
+  const showIntro = $derived(mustInstall || route.name === 'intro' || !data.settings.onboarded)
+  // Wer die Einführung schon kennt, landet im Browser direkt bei der Installationsanleitung.
+  // svelte-ignore state_referenced_locally
+  const startAtInstall = data.settings.onboarded && route.name !== 'intro'
 
   // Der Player spielt immer den Rhythmus, der gerade offen ist.
   $effect(() => {
@@ -52,7 +57,7 @@
 </main>
 
 {#if showIntro}
-  <Onboarding ondone={finishIntro} />
+  <Onboarding ondone={finishIntro} onseen={() => (data.settings.onboarded = true)} {startAtInstall} />
 {/if}
 
 {#if player.running}

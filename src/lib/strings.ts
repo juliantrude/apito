@@ -65,18 +65,16 @@ export const t = {
       text: 'Fang langsam an und steigere dich: Dein letztes Tempo bleibt gespeichert, das Zieltempo steht immer daneben. Rhythmen kannst du als Datei exportieren und an deine Band schicken.',
     },
   ] satisfies IntroSlide[] as IntroSlide[],
-  introSkip: 'Überspringen',
 
   install: {
     title: 'Hol mich aufs Handy!',
-    text: 'Als App bin ich mit einem Tipp da, laufe im Vollbild und auch ohne Internet.',
+    text: 'Ich laufe nur als App – dafür bin ich mit einem Tipp da, im Vollbild und auch ohne Internet.',
     button: 'Jetzt installieren',
     manual: 'So geht’s:',
     manualAlt: 'Oder von Hand:',
-    outro: 'Danach öffnest du Apito über das neue Symbol auf deinem Startbildschirm – dort geht die Einführung weiter.',
-    continueInBrowser: 'Erst mal im Browser weiter',
+    outro: 'Danach öffnest du Apito über das neue Symbol auf deinem Startbildschirm.',
     doneTitle: 'Geschafft!',
-    doneText: 'Öffne Apito jetzt über das neue Symbol auf deinem Startbildschirm – dort geht die Einführung weiter.',
+    doneText: 'Öffne Apito jetzt über das neue Symbol auf deinem Startbildschirm.',
     guides: {
       'ios-safari': {
         steps: [
